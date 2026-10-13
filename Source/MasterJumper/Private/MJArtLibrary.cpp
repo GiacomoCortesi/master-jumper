@@ -78,8 +78,8 @@ namespace
 
 		for (const float Side : { -1.f, 1.f })
 		{
-			const FVector Shoulder(6.f, Side * 25.f, -36.f);
-			const FVector Wrist(62.f, Side * 10.f, -13.f);
+			const FVector Shoulder(6.f, Side * 26.f, -32.f);
+			const FVector Wrist(64.f, Side * 12.f, -21.f);
 			const FVector Dir = (Wrist - Shoulder).GetSafeNormal();
 			const FVector Inward(0.f, -Side, 0.f);
 
