@@ -3,6 +3,7 @@
 #include "MJLayout.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
@@ -44,6 +45,7 @@ AMJCorridor::AMJCorridor()
 	{
 		UPointLightComponent* Light = CreateDefaultSubobject<UPointLightComponent>(*FString::Printf(TEXT("CeilingLight%d"), i));
 		Light->SetupAttachment(RootComponent);
+		Light->SetMobility(EComponentMobility::Movable);
 		Lights.Add(Light);
 	}
 }
@@ -67,7 +69,7 @@ void AMJCorridor::Build(bool bAllowTransient)
 	const float HW = CorridorHalfWidth;
 	const float OuterHW = CorridorHalfWidth + WallThickness;
 
-	auto Prepare = [this, Cube](UInstancedStaticMeshComponent* Component, const FLinearColor& Color)
+	auto Prepare = [Cube](UInstancedStaticMeshComponent* Component, const FLinearColor& Color)
 	{
 		Component->ClearInstances();
 		Component->SetStaticMesh(Cube);

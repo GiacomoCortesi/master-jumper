@@ -76,9 +76,9 @@ void AMJPlayer::BeginPlay()
 	DivePresentation->HideArms();
 
 	SpawnFloorLocation = GetActorLocation() - FVector(0.f, 0.f, StandingHalfHeight + FloorGap);
-	if (AMJLevelController* Controller = AMJLevelController::Get(this))
+	if (AMJLevelController* LevelCtrl = AMJLevelController::Get(this))
 	{
-		Controller->RegisterPlayer(this);
+		LevelCtrl->RegisterPlayer(this);
 	}
 	else
 	{
@@ -166,9 +166,9 @@ void AMJPlayer::PressJump()
 	const EMJJumpState State = GetJumpState();
 	if (State == EMJJumpState::Succeeded)
 	{
-		if (AMJLevelController* Controller = LevelController.Get())
+		if (AMJLevelController* LevelCtrl = LevelController.Get())
 		{
-			Controller->RequestRestart();
+			LevelCtrl->RequestRestart();
 		}
 		return;
 	}
@@ -330,8 +330,10 @@ void AMJPlayer::Touchdown(const FHitResult& Hit)
 	FHitResult Floor;
 	if (!FindFloor(Floor))
 	{
-		// Clipped a ledge corner with the centre already past it: keep falling forward.
+		// Clipped a ledge corner with the centre already past it: step off the lip (unswept) and keep falling,
+		// otherwise the same sweep would hit the same corner every frame.
 		Velocity.Z = FMath::Min(Velocity.Z, 0.f);
+		AddActorWorldOffset(FVector(CapsuleRadius, 0.f, 0.f), false);
 		return;
 	}
 
@@ -360,9 +362,9 @@ void AMJPlayer::SetCapsuleHalfHeightKeepCentre(float HalfHeight)
 
 void AMJPlayer::ReportFail(EMJFailReason Reason)
 {
-	if (AMJLevelController* Controller = LevelController.Get())
+	if (AMJLevelController* LevelCtrl = LevelController.Get())
 	{
-		Controller->ReportFail(Reason);
+		LevelCtrl->ReportFail(Reason);
 	}
 	else
 	{

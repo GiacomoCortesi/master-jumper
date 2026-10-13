@@ -19,7 +19,7 @@ AMJLevelController* AMJLevelController::Get(const UObject* WorldContextObject)
 	{
 		return nullptr;
 	}
-	for (TActorIterator<AMJLevelController> It(World); It; ++It)
+	if (TActorIterator<AMJLevelController> It(World); It)
 	{
 		return *It;
 	}

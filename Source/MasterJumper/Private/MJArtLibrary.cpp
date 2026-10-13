@@ -246,7 +246,7 @@ UStaticMesh* UMJArtLibrary::ResolveMesh(EMJArt Art, bool bAllowTransient)
 	TArray<FStaticMaterial> StaticMaterials;
 	for (const FMJMeshBuilder::FSection& Section : Builder.Sections)
 	{
-		StaticMaterials.Add(FStaticMaterial(nullptr, Section.Slot, Section.Slot));
+		StaticMaterials.Add(FStaticMaterial(nullptr, Section.Slot)); // imported-slot-name overload is editor-only
 	}
 	Mesh->SetStaticMaterials(StaticMaterials);
 

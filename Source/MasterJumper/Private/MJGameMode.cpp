@@ -28,7 +28,7 @@ namespace
 	template <typename T>
 	T* FindOrSpawn(UWorld* World, const TCHAR* BlueprintName, const FTransform& Transform)
 	{
-		for (TActorIterator<T> It(World); It; ++It)
+		if (TActorIterator<T> It(World); It)
 		{
 			return *It;
 		}
@@ -90,7 +90,9 @@ void AMJGameMode::RestartPlayer(AController* NewPlayer)
 	{
 		Start = Controller->PlayerStartLocation;
 	}
-	const AMJPlayer* PawnDefaults = GetDefault<AMJPlayer>();
+	UClass* PawnClass = GetDefaultPawnClassForController(NewPlayer);
+	const AMJPlayer* PawnDefaults = (PawnClass && PawnClass->IsChildOf(AMJPlayer::StaticClass()))
+		? PawnClass->GetDefaultObject<AMJPlayer>() : GetDefault<AMJPlayer>();
 	Start.Z += PawnDefaults->StandingHalfHeight + PawnDefaults->FloorGap;
 	RestartPlayerAtTransform(NewPlayer, FTransform(FRotator::ZeroRotator, Start));
 }

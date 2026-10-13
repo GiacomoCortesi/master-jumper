@@ -45,7 +45,7 @@ def step(name):
 
 
 def project_file(*parts):
-    return os.path.normpath(os.path.join(unreal.Paths.project_dir(), *parts))
+    return os.path.normpath(os.path.join(unreal.Paths.convert_relative_path_to_full(unreal.Paths.project_dir()), *parts))
 
 
 def exists(path):
